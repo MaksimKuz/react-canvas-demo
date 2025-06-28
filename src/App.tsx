@@ -1,11 +1,10 @@
 import './App.css'
+// @ts-ignore
+import {Canvas} from './Canvas.jsx';
 
 function App() {
-
   return (
-    <h2>
-        Hello World!
-    </h2>
+    <Canvas width={500} height={500} />
   )
 }
 
