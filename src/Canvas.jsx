@@ -1,28 +1,21 @@
 import { useRef, useEffect } from 'react';
 
-export function Canvas(props) {
+export function Canvas({width, height, onPaint, onInit, onDestroy}) {
     const canvasRef = useRef(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
 
-        context.fillStyle = 'red';
-        context.fillRect(0, 0, props.width, props.height);
-
-        const clickHandler = () => {
-            context.fillStyle = 'blue';
-            context.fillRect(0, 0, props.width, props.height);
-        };
-
-        canvas.addEventListener('click', clickHandler);
+        if (onInit) onInit(canvas, context, width, height)
+        if (onPaint) onPaint(canvas, context, width, height);
 
         return () => {
-            canvas.removeEventListener('click', clickHandler);
+            if (onDestroy) onDestroy(canvas, context, width, height);
         };
     }, []);
 
     return (
-        <canvas ref={canvasRef} width={props.width} height={props.height} />
+        <canvas ref={canvasRef} width={width} height={height} />
     );
 }
