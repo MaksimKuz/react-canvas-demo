@@ -27,8 +27,13 @@ class Timer extends Component {
 
     getCurrentTimeStr() {
         const date = Date.now();
-        const formatter = new Intl.DateTimeFormat('ru-RU',
-            {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+        let formatter;
+        if (this.props.showSeconds)
+            formatter = new Intl.DateTimeFormat('ru-RU',
+                {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+       else
+            formatter = new Intl.DateTimeFormat('ru-RU',
+                {hour: '2-digit', minute: '2-digit'});
         return formatter.format(date);
     }
 

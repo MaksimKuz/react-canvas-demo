@@ -29,11 +29,21 @@ function App() {
          canvas.removeEventListener('click', ch);
       }
 
+  const blockStyle = {
+        margin:"10px"}
+
   return (
-      <div style={{"display":"flex"}}>
-          <Canvas style={{"margin":"10px"}} width={500} height={300} onPaint={myPaint} onInit={myInit} onDestroy={myDestroy}/>
-          <Canvas width={200} height={600} onPaint={myPaint} onInit={myInit} onDestroy={myDestroy}/>
-          <Timer/>
+      <div style={{display:"flex", flexDirection:"row", flexWrap:"wrap"}}>
+          <div style={blockStyle}>
+              <Canvas width={500} height={200} onPaint={myPaint} onInit={myInit}
+                     onDestroy={myDestroy}/>
+          </div>
+          <div style={blockStyle}>
+              <Canvas width={300} height={300} onPaint={myPaint} onInit={myInit}
+                     onDestroy={myDestroy}/>
+          </div>
+          <div style={blockStyle}><Timer showSeconds={true}/></div>
+          <div style={blockStyle}><Timer/></div>
       </div>
   )
 }
