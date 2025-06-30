@@ -1,7 +1,7 @@
 import './App.css'
 // @ts-ignore
 import {Canvas} from './Canvas.jsx';
-import {useEffect} from "react";
+import Timer from "./Timer.jsx";
 
 function App() {
 
@@ -30,7 +30,11 @@ function App() {
       }
 
   return (
-    <Canvas width={500} height={500} onPaint={myPaint} onInit={myInit} onDestroy={myDestroy} />
+      <div style={{"display":"flex"}}>
+          <Canvas style={{"margin":"10px"}} width={500} height={300} onPaint={myPaint} onInit={myInit} onDestroy={myDestroy}/>
+          <Canvas width={200} height={600} onPaint={myPaint} onInit={myInit} onDestroy={myDestroy}/>
+          <Timer/>
+      </div>
   )
 }
 
