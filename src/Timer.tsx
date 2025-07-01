@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 
-class Timer extends Component {
+export type TimerProps = {
+    showSeconds: boolean
+}
 
-    constructor(props) {
+class Timer extends Component<TimerProps> {
+
+    constructor(props: TimerProps) {
         super(props);
         this.state = {
             value: this.getCurrentTimeStr(),
@@ -28,7 +32,7 @@ class Timer extends Component {
     getCurrentTimeStr() {
         const date = Date.now();
         let formatter;
-        if (this.props.showSeconds)
+        if (this.props.showSeconds === undefined || this.props.showSeconds)
             formatter = new Intl.DateTimeFormat('ru-RU',
                 {hour: '2-digit', minute: '2-digit', second: '2-digit'});
        else
