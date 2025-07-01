@@ -1,21 +1,30 @@
-import { useRef, useEffect } from 'react';
 
-export function Canvas({width, height, onPaint, onInit, onDestroy}) {
-    const canvasRef = useRef(null);
+import React, {Component, useRef} from 'react';
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
+export class Canvas extends Component {
 
-        if (onInit) onInit(canvas, context, width, height)
-        if (onPaint) onPaint(canvas, context, width, height);
+    constructor(props) {
+        super(props);
+        this.canvasRef = React.createRef();
+    }
 
-        return () => {
-            if (onDestroy) onDestroy(canvas, context, width, height);
-        };
-    }, []);
+    doPaint(canvas, context, width, height){
+        context.fillStyle = 'red';
+        context.fillRect(0, 0, width, height);
+    }
 
-    return (
-        <canvas ref={canvasRef} width={width} height={height} />
-    );
+    componentDidMount() {
+        this.canvas = this.canvasRef.current;
+        this.context = this.canvas.getContext('2d');
+
+        this.doPaint(this.canvas, this.context, this.props.width, this.props.height);
+    }
+
+    render() {
+        return (
+            <div>
+                <canvas ref={this.canvasRef} width={this.props.width} height={this.props.height}/>
+            </div>
+        );
+    }
 }

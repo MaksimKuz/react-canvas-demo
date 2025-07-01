@@ -2,6 +2,7 @@ import './App.css'
 // @ts-ignore
 import {Canvas} from './Canvas.jsx';
 import Timer from "./Timer.jsx";
+import Clock from "./Clock.jsx";
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
           </div>
           <div style={blockStyle}><Timer showSeconds={true}/></div>
           <div style={blockStyle}><Timer/></div>
+          <div style={blockStyle}><Clock width={300} height={300} onPaint={myPaint} /></div>
       </div>
   )
 }
