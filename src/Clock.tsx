@@ -90,7 +90,8 @@ class Clock extends Canvas
      * @param context
      * @private
      */
-    private showArrows(context: CanvasRenderingContext2D) {
+    private showArrows(context: CanvasRenderingContext2D)
+    {
         const [hours, minutes, seconds] = getArrowAngles();
         const [hoursX, hoursY] = this.pointOnCircle(this.radius - 40, hours);
 
@@ -117,13 +118,14 @@ class Clock extends Canvas
 
     private showDate(context: CanvasRenderingContext2D)
     {
+        context.fillStyle = 'lightgray';
+        context.fillRect(this.centerX-50, this.centerY + this.radius/2-20, 100, 40);
+
         context.font = "normal "+16+"pt Arial ";
-        // context.te
         context.textAlign = 'center';
         context.textBaseline = 'middle';
         context.fillStyle = 'blue';
-        const formatter = new Intl.DateTimeFormat('ru-RU',
-                {day:'2-digit', month:'short'});
+        const formatter = new Intl.DateTimeFormat('ru-RU', {day:'2-digit', month:'short'});
         context.fillText(formatter.format(Date.now()), this.centerX, this.centerY + this.radius/2)
     }
 }
@@ -144,7 +146,8 @@ function getArrowAngles()
     return [hours*k*5, minutes*k, seconds*k]
 }
 
-function circle(context: CanvasRenderingContext2D, x: number, y: number, radius: number, color: string){
+function circle(context: CanvasRenderingContext2D, x: number, y: number, radius: number, color: string)
+{
     context.beginPath();
     context.arc(x, y, radius, 0, 2*Math.PI);
     context.fillStyle = color;
@@ -153,7 +156,8 @@ function circle(context: CanvasRenderingContext2D, x: number, y: number, radius:
 }
 
 function line(context: CanvasRenderingContext2D, x1: number, y1: number,
-              x2: number, y2: number, thickness: number){
+              x2: number, y2: number, thickness: number)
+{
     context.lineWidth = thickness;
     context.beginPath();
     context.moveTo(x1, y1);

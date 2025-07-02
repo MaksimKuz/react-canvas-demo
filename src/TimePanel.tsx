@@ -1,6 +1,6 @@
 import React from 'react';
 import Clock from "./Clock.tsx";
-import Timer, {type TimerProps} from "./Timer.tsx";
+import {Timer, type TimerProps} from "./Timer.tsx";
 
 export default function TimePanel(props: TimerProps) {
     return (

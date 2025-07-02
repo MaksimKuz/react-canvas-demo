@@ -10,7 +10,7 @@ type TimerState = {
     displayText: string
 }
 
-class Timer extends Component<TimerProps, TimerState> {
+export class Timer extends Component<TimerProps, TimerState> {
 
     constructor({width, height, showSeconds = true}: TimerProps) {
         super({width, height, showSeconds});
@@ -32,7 +32,7 @@ class Timer extends Component<TimerProps, TimerState> {
     componentDidMount() {
         this.intervalId = setInterval(() => {
             this.setState({displayText: this.getCurrentTimeStr()});
-       }, 1000);
+       }, 500);
     }
 
     componentWillUnmount() {
@@ -50,5 +50,3 @@ class Timer extends Component<TimerProps, TimerState> {
         return formatter.format(Date.now());
     }
 }
-
-export default Timer;
