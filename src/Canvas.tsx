@@ -29,6 +29,10 @@ export class Canvas extends Component<CanvasProps> {
         _context.fillRect(0, 0, this.width, this.height);
     }
 
+    repaint(){
+        this.doPaint(this._canvas, this._context);
+    }
+
     public get width(): number {
         return (this.props as CanvasProps).width;
     }
