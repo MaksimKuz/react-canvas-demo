@@ -1,8 +1,9 @@
 import './App.css'
 // @ts-ignore
-import Timer from "./Timer.jsx";
+import Timer from "./Timer.tsx";
 import {Canvas} from './Canvas.tsx';
 import Clock from "./Clock.tsx";
+import TimePanel from "./TimePanel.tsx";
 
 function App() {
 
@@ -34,10 +35,9 @@ function App() {
           <div style={blockStyle}>
               <Canvas width={300} height={300} />
           </div>
-          <div style={blockStyle}><Timer showSeconds={true}/></div>
-          <div style={blockStyle}><Timer/></div>
-          <div style={blockStyle}><Clock width={300} height={200} /></div>
-          <div style={blockStyle}><Clock width={200} height={300} /></div>
+          <div style={blockStyle}><TimePanel width={300} height={400} /></div>
+          <div style={blockStyle}><TimePanel width={200} height={300} /></div>
+
       </div>
   )
 }

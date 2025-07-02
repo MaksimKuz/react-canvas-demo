@@ -1,21 +1,9 @@
-import {Canvas, type CanvasProps} from "./Canvas.tsx";
-import React from "react";
+import {Canvas} from "./Canvas.tsx";
 
 class Clock extends Canvas
 {
     constructor(width: number, height: number) {
-        super(width, height);
-        this.state = {
-            value: this.getCurrentTimeStr(),
-        };
-    }
-
-    getCurrentTimeStr() {
-        const date = Date.now();
-        let formatter;
-            formatter = new Intl.DateTimeFormat('ru-RU',
-                {hour: '2-digit', minute: '2-digit'});
-        return formatter.format(date);
+        super({width, height});
     }
 
     intervalId = 0;

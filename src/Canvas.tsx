@@ -8,8 +8,8 @@ export type CanvasProps = {
 
 export class Canvas extends Component<CanvasProps> {
     private _canvasRef: React.RefObject<HTMLCanvasElement>;
-    private _canvas: HTMLCanvasElement | undefined;
-    private _context: CanvasRenderingContext2D | undefined;
+    private _canvas?: HTMLCanvasElement;
+    private _context?: CanvasRenderingContext2D;
 
     constructor({width, height}: CanvasProps)
     {
@@ -23,14 +23,19 @@ export class Canvas extends Component<CanvasProps> {
         this.doPaint(this._canvas, this._context);
     }
 
+    /**
+     * Реализация отрисовки по умолчанию.
+     * @param canvas
+     * @param _context
+     */
     doPaint(canvas: HTMLCanvasElement, _context: CanvasRenderingContext2D)
     {
-        _context.fillStyle = 'blue';
+        _context.fillStyle = 'white';
         _context.fillRect(0, 0, this.width, this.height);
     }
 
     repaint(){
-        this.doPaint(this._canvas, this._context);
+        this.doPaint(this._canvas as HTMLCanvasElement, this._context as CanvasRenderingContext2D);
     }
 
     public get width(): number {
