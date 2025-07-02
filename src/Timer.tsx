@@ -1,28 +1,28 @@
 import React, {Component} from 'react';
 
 export type TimerProps = {
-    showSeconds?: boolean;
     width: number;
     height: number;
+    showSeconds?: boolean;
 }
 
 type TimerState = {
-    value: string
+    displayText: string
 }
 
 class Timer extends Component<TimerProps, TimerState> {
 
-    constructor(props: TimerProps) {
-        super(props);
+    constructor({width, height, showSeconds = true}: TimerProps) {
+        super({width, height, showSeconds});
         this.state = {
-            value: this.getCurrentTimeStr(),
+            displayText: this.getCurrentTimeStr(),
         };
     }
 
     render() {
         return (
             <h1>
-                {this.state.value}
+                {this.state.displayText}
             </h1>
         );
     }
@@ -31,12 +31,15 @@ class Timer extends Component<TimerProps, TimerState> {
 
     componentDidMount() {
         this.intervalId = setInterval(() => {
-            this.setState({value: this.getCurrentTimeStr()});
+            this.setState({displayText: this.getCurrentTimeStr()});
        }, 1000);
     }
 
+    componentWillUnmount() {
+        clearInterval(this.intervalId);
+    }
+
     getCurrentTimeStr() {
-        const date = Date.now();
         let formatter;
         if (this.props.showSeconds === undefined || this.props.showSeconds)
             formatter = new Intl.DateTimeFormat('ru-RU',
@@ -44,11 +47,7 @@ class Timer extends Component<TimerProps, TimerState> {
        else
             formatter = new Intl.DateTimeFormat('ru-RU',
                 {hour: '2-digit', minute: '2-digit'});
-        return formatter.format(date);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.intervalId);
+        return formatter.format(Date.now());
     }
 }
 

@@ -20,53 +20,100 @@ class Clock extends Canvas
         clearInterval(this.intervalId);
     }
 
+    // координаты центра часов
+    centerX = 0;
+    centerY = 0;
+    // внешний радиус часов
+    radius = 0;
+
     doPaint(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D)
     {
-        context.fillStyle = 'lightgray';
-        context.fillRect(0, 0, this.width, this.height);
+        this.radius = Math.min(this.width, this.height)/2-30;
+        this.centerX = this.width / 2;
+        this.centerY = this.height / 2;
 
-        const radius = Math.min(this.width, this.height)/2-30;
-        const centerX = this.width / 2;
-        const centerY = this.height / 2;
+        this.paintBackground(context);
 
-        circle(context, centerX, centerY, radius, "white");
-        circle(context, centerX, centerY, 3, "black");
-
-        for (let i = 0; i < 12; i++) {
-            const angle = 2 * Math.PI / 12 * i - Math.PI / 2;
-            const [x, y] = pointOnCircle(centerX, centerY, radius, angle);
+        // отрисовка часов
+        for (let i = 0; i < 12; i++)
+        {
+            const angle = 360 / 12 * i;
+            const [x, y] = this.pointOnCircle(this.radius, angle);
             circle(context, x, y, 3, "black");
 
             context.font = "normal "+16+"pt Arial ";
             context.textAlign = 'center';
             context.textBaseline = 'middle';
-            const textRadius = radius + 15;
-            const [textX, textY] = pointOnCircle(centerX, centerY, textRadius, angle);
-            context.fillText(i.toString(), textX, textY);
+            const textRadius = this.radius + 15;
+            const [textX, textY] = this.pointOnCircle(textRadius, angle);
+            context.fillText(hourToText(i), textX, textY);
+
+           if (i > 0) this.showMinuteTicks(context, i);
         }
 
-        const [hours, minutes, seconds] = getTimeAngles();
-        const [hoursX, hoursY] = pointOnCircle(centerX, centerY, radius-40, hours);
-        line(context, centerX, centerY, hoursX, hoursY, 3);
-        const [minutesX, minutesY] = pointOnCircle(centerX, centerY, radius-10, minutes);
-        line(context, centerX, centerY, minutesX, minutesY, 2);
-        const [secondsX, secondsY] = pointOnCircle(centerX, centerY, radius-5, seconds);
-        line(context, centerX, centerY, secondsX, secondsY, 1);
+        this.paintArrows(context);
+    }
+
+    private paintBackground(context: CanvasRenderingContext2D) {
+        context.fillStyle = 'lightgray';
+        context.fillRect(0, 0, this.width, this.height);
+        circle(context, this.centerX, this.centerY, this.radius, "white");
+        circle(context, this.centerX, this.centerY, 3, "black");
+    }
+
+    /**
+     * Отрисовывает стрелки часов.
+     * @param context
+     * @private
+     */
+    private paintArrows(context: CanvasRenderingContext2D) {
+        const [hours, minutes, seconds] = getArrowAngles();
+        const [hoursX, hoursY] = this.pointOnCircle(this.radius - 40, hours);
+        line(context, this.centerX, this.centerY, hoursX, hoursY, 3);
+        const [minutesX, minutesY] = this.pointOnCircle(this.radius - 10, minutes);
+        line(context, this.centerX, this.centerY, minutesX, minutesY, 2);
+        const [secondsX, secondsY] = this.pointOnCircle(this.radius - 5, seconds);
+        line(context, this.centerX, this.centerY, secondsX, secondsY, 1);
+    }
+
+    private showMinuteTicks(context: CanvasRenderingContext2D, hour: number)
+    {
+        for (let i = 0; i < 10; i++) {
+            let angle: number = 2 * Math.PI / 12 * hour * i - Math.PI / 2;
+            let [x, y] = this.pointOnCircle(this.radius-2, angle);
+            circle(context, x, y, 5, "black");
+        }
+    }
+
+    /**
+     * Возвращает координаты точки на окружности указанного радиуса от центра часов и угла.
+     * @param radius расстояние от центра часов
+     * @param angle угол в градусах от вертикального направления
+     * @private
+     */
+    private pointOnCircle(radius: number, angle: number)
+    {
+        const a = angle * 2 * Math.PI / 360 - Math.PI / 2;
+        const x = this.centerX + radius * Math.cos(a);
+        const y = this.centerY + radius * Math.sin(a);
+        return [x, y]
     }
 }
 
-function getTimeAngles(){
+function hourToText(hour: number): string
+{
+    if (hour === 0) return '12';
+    return hour.toString()
+}
+
+function getArrowAngles()
+{
     const date = new Date();
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
-    return [hours/12*2 * Math.PI- Math.PI / 2, minutes/60*2 * Math.PI- Math.PI / 2, seconds/60*2 * Math.PI- Math.PI / 2]
-}
-
-function pointOnCircle(centerX: number, centerY: number, radius: number, angle: number){
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
-    return [x, y]
+    const k = 360/60
+    return [hours*k*5, minutes*k, seconds*k]
 }
 
 function circle(context: CanvasRenderingContext2D, x: number, y: number, radius: number, color: string){
