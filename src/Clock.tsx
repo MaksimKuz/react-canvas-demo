@@ -48,7 +48,7 @@ class Clock extends Canvas
             const [textX, textY] = this.pointOnCircle(textRadius, angle);
             context.fillText(hourToText(i), textX, textY);
 
-           if (i > 0) this.showMinuteTicks(context, i);
+            this.showMinuteTicks(context, i);
         }
 
         this.paintArrows(context);
@@ -76,12 +76,19 @@ class Clock extends Canvas
         line(context, this.centerX, this.centerY, secondsX, secondsY, 1);
     }
 
+    /**
+     * Отрисовывает метки минут для указанного часа.
+     * @param context
+     * @param hour
+     * @private
+     */
     private showMinuteTicks(context: CanvasRenderingContext2D, hour: number)
     {
-        for (let i = 0; i < 10; i++) {
-            let angle: number = 2 * Math.PI / 12 * hour * i - Math.PI / 2;
+        for (let i = 1; i < 5; i++) {
+            // угол между метками - 360/60, угол между часами - 360/12
+            let angle: number = 360/12*hour + 360/60*i;
             let [x, y] = this.pointOnCircle(this.radius-2, angle);
-            circle(context, x, y, 5, "black");
+            circle(context, x, y, 2, "black");
         }
     }
 
