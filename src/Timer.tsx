@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
 
 export type TimerProps = {
-    showSeconds: boolean
+    showSeconds?: boolean;
+    width: number;
+    height: number;
 }
 
-class Timer extends Component<TimerProps> {
+type TimerState = {
+    value: string
+}
+
+class Timer extends Component<TimerProps, TimerState> {
 
     constructor(props: TimerProps) {
         super(props);

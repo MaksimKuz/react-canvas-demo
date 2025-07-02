@@ -36,7 +36,7 @@ function App() {
               <Canvas width={300} height={300} />
           </div>
           <div style={blockStyle}><TimePanel width={300} height={400} /></div>
-          <div style={blockStyle}><TimePanel width={200} height={300} /></div>
+          <div style={blockStyle}><TimePanel width={200} height={300} showSeconds={false} /></div>
 
       </div>
   )
