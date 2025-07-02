@@ -33,47 +33,38 @@ class Clock extends Canvas
         this.centerY = this.height / 2;
 
         this.paintBackground(context);
-
-        // отрисовка часов
-        for (let i = 0; i < 12; i++)
-        {
-            const angle = 360 / 12 * i;
-            const [x, y] = this.pointOnCircle(this.radius, angle);
-            circle(context, x, y, 3, "black");
-
-            context.font = "normal "+16+"pt Arial ";
-            context.textAlign = 'center';
-            context.textBaseline = 'middle';
-            const textRadius = this.radius + 15;
-            const [textX, textY] = this.pointOnCircle(textRadius, angle);
-            context.fillText(hourToText(i), textX, textY);
-
-            this.showMinuteTicks(context, i);
-        }
-
-        this.paintArrows(context);
+        this.showDate(context);
+        this.showTicks(context);
+        this.showArrows(context);
     }
 
-    private paintBackground(context: CanvasRenderingContext2D) {
+    private paintBackground(context: CanvasRenderingContext2D)
+    {
         context.fillStyle = 'lightgray';
         context.fillRect(0, 0, this.width, this.height);
         circle(context, this.centerX, this.centerY, this.radius, "white");
         circle(context, this.centerX, this.centerY, 3, "black");
     }
 
-    /**
-     * Отрисовывает стрелки часов.
-     * @param context
-     * @private
-     */
-    private paintArrows(context: CanvasRenderingContext2D) {
-        const [hours, minutes, seconds] = getArrowAngles();
-        const [hoursX, hoursY] = this.pointOnCircle(this.radius - 40, hours);
-        line(context, this.centerX, this.centerY, hoursX, hoursY, 3);
-        const [minutesX, minutesY] = this.pointOnCircle(this.radius - 10, minutes);
-        line(context, this.centerX, this.centerY, minutesX, minutesY, 2);
-        const [secondsX, secondsY] = this.pointOnCircle(this.radius - 5, seconds);
-        line(context, this.centerX, this.centerY, secondsX, secondsY, 1);
+    private showTicks(context: CanvasRenderingContext2D)
+    {
+        for (let i = 0; i < 12; i++) {
+            const angle = 360 / 12 * i;
+            const [x1, y1] = this.pointOnCircle(this.radius-7, angle);
+            const [x2, y2] = this.pointOnCircle(this.radius, angle);
+            line(context, x1, y1, x2, y2, 3);
+            // circle(context, x2, y2, 3, "black");
+
+            context.font = "normal " + 18 + "pt Arial ";
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillStyle = 'black';
+            const textRadius = this.radius + 15;
+            const [textX, textY] = this.pointOnCircle(textRadius, angle);
+            context.fillText(hourToText(i), textX, textY);
+
+            this.showMinuteTicks(context, i);
+        }
     }
 
     /**
@@ -86,10 +77,28 @@ class Clock extends Canvas
     {
         for (let i = 1; i < 5; i++) {
             // угол между метками - 360/60, угол между часами - 360/12
-            let angle: number = 360/12*hour + 360/60*i;
-            let [x, y] = this.pointOnCircle(this.radius-2, angle);
-            circle(context, x, y, 2, "black");
+            const angle: number = 360 / 12 * hour + 360 / 60 * i;
+            const [x1, y1] = this.pointOnCircle(this.radius - 6, angle);
+            const [x2, y2] = this.pointOnCircle(this.radius - 2, angle);
+            line(context, x1, y1, x2, y2, 2);
+            // circle(context, x2, y2, 2, "black");
         }
+    }
+
+    /**
+     * Отрисовывает стрелки часов.
+     * @param context
+     * @private
+     */
+    private showArrows(context: CanvasRenderingContext2D) {
+        const [hours, minutes, seconds] = getArrowAngles();
+        const [hoursX, hoursY] = this.pointOnCircle(this.radius - 40, hours);
+
+        line(context, this.centerX, this.centerY, hoursX, hoursY, 3);
+        const [minutesX, minutesY] = this.pointOnCircle(this.radius - 10, minutes);
+        line(context, this.centerX, this.centerY, minutesX, minutesY, 2);
+        const [secondsX, secondsY] = this.pointOnCircle(this.radius - 5, seconds);
+        line(context, this.centerX, this.centerY, secondsX, secondsY, 1);
     }
 
     /**
@@ -104,6 +113,18 @@ class Clock extends Canvas
         const x = this.centerX + radius * Math.cos(a);
         const y = this.centerY + radius * Math.sin(a);
         return [x, y]
+    }
+
+    private showDate(context: CanvasRenderingContext2D)
+    {
+        context.font = "normal "+16+"pt Arial ";
+        // context.te
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.fillStyle = 'blue';
+        const formatter = new Intl.DateTimeFormat('ru-RU',
+                {day:'2-digit', month:'short'});
+        context.fillText(formatter.format(Date.now()), this.centerX, this.centerY + this.radius/2)
     }
 }
 
