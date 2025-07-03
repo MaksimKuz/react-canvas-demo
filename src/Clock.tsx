@@ -1,5 +1,7 @@
 import {Canvas} from "./Canvas.tsx";
 
+const hourTickSize = 7;
+
 class Clock extends Canvas
 {
     constructor(width: number, height: number, showSecondsArrow: boolean, showDate: boolean) {
@@ -50,7 +52,7 @@ class Clock extends Canvas
     {
         for (let i = 0; i < 12; i++) {
             const angle = 360 / 12 * i;
-            const [x1, y1] = this.pointOnCircle(this.radius-7, angle);
+            const [x1, y1] = this.pointOnCircle(this.radius-hourTickSize, angle);
             const [x2, y2] = this.pointOnCircle(this.radius, angle);
             line(context, x1, y1, x2, y2, 3);
             // circle(context, x2, y2, 3, "black");
@@ -92,15 +94,16 @@ class Clock extends Canvas
      */
     private showArrows(context: CanvasRenderingContext2D)
     {
+
         const [hours, minutes, seconds] = getArrowAngles();
-        const [hoursX, hoursY] = this.pointOnCircle(this.radius - 40, hours);
+        const [hoursX, hoursY] = this.pointOnCircle(this.radius/2*6/5, hours);
         line(context, this.centerX, this.centerY, hoursX, hoursY, 3);
 
-        const [minutesX, minutesY] = this.pointOnCircle(this.radius - 10, minutes);
+        const [minutesX, minutesY] = this.pointOnCircle(this.radius - hourTickSize-2, minutes);
         line(context, this.centerX, this.centerY, minutesX, minutesY, 2);
 
         if (this.props.showSecondsArrow) {
-            const [secondsX, secondsY] = this.pointOnCircle(this.radius - 5, seconds);
+            const [secondsX, secondsY] = this.pointOnCircle(this.radius - hourTickSize-2, seconds);
             line(context, this.centerX, this.centerY, secondsX, secondsY, 1);
         }
     }
