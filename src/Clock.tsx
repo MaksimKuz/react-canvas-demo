@@ -2,7 +2,7 @@ import {Canvas} from "./Canvas.tsx";
 
 class Clock extends Canvas
 {
-    constructor(width: number, height: number) {
+    constructor(width: number, height: number, showSecondsArrow: boolean, showDate: boolean) {
         super({width, height});
     }
 
@@ -33,7 +33,7 @@ class Clock extends Canvas
         this.centerY = this.height / 2;
 
         this.paintBackground(context);
-        this.showDate(context);
+        if (this.props.showDate) this.showDate(context);
         this.showTicks(context);
         this.showArrows(context);
     }
@@ -94,12 +94,15 @@ class Clock extends Canvas
     {
         const [hours, minutes, seconds] = getArrowAngles();
         const [hoursX, hoursY] = this.pointOnCircle(this.radius - 40, hours);
-
         line(context, this.centerX, this.centerY, hoursX, hoursY, 3);
+
         const [minutesX, minutesY] = this.pointOnCircle(this.radius - 10, minutes);
         line(context, this.centerX, this.centerY, minutesX, minutesY, 2);
-        const [secondsX, secondsY] = this.pointOnCircle(this.radius - 5, seconds);
-        line(context, this.centerX, this.centerY, secondsX, secondsY, 1);
+
+        if (this.props.showSecondsArrow) {
+            const [secondsX, secondsY] = this.pointOnCircle(this.radius - 5, seconds);
+            line(context, this.centerX, this.centerY, secondsX, secondsY, 1);
+        }
     }
 
     /**
@@ -124,7 +127,7 @@ class Clock extends Canvas
         context.font = "normal "+16+"pt Arial ";
         context.textAlign = 'center';
         context.textBaseline = 'middle';
-        context.fillStyle = 'blue';
+        context.fillStyle = 'black';
         const formatter = new Intl.DateTimeFormat('ru-RU', {day:'2-digit', month:'short'});
         context.fillText(formatter.format(Date.now()), this.centerX, this.centerY + this.radius/2)
     }
