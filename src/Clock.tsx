@@ -1,27 +1,17 @@
-import {Canvas} from "./Canvas.tsx";
+import {TimerBase} from "./TimerBase.tsx";
 
 const hourTickSize = 7;
 
-class Clock extends Canvas
+export type ClockProps = {
+    width: number;
+    height: number;
+    showSecondsArrow: boolean;
+    borderWidth: number;
+    showDate: boolean;
+}
+
+class Clock extends TimerBase<ClockProps>
 {
-    constructor(width: number, height: number, showSecondsArrow: boolean, showDate: boolean, borderWidth: number = 30) {
-        super({width, height});
-    }
-
-    intervalId = 0;
-
-    componentDidMount() {
-        super.componentDidMount();
-
-        this.intervalId = setInterval(() => {
-            this.repaint();
-        }, 1000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.intervalId);
-    }
-
     // координаты центра часов
     centerX = 0;
     centerY = 0;
