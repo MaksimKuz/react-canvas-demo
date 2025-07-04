@@ -4,7 +4,7 @@ const hourTickSize = 7;
 
 class Clock extends Canvas
 {
-    constructor(width: number, height: number, showSecondsArrow: boolean, showDate: boolean) {
+    constructor(width: number, height: number, showSecondsArrow: boolean, showDate: boolean, borderWidth: number = 30) {
         super({width, height});
     }
 
@@ -30,7 +30,7 @@ class Clock extends Canvas
 
     doPaint(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D)
     {
-        this.radius = Math.min(this.width, this.height)/2-30;
+        this.radius = Math.min(this.width, this.height)/2-this.props.borderWidth;
         this.centerX = this.width / 2;
         this.centerY = this.height / 2;
 
