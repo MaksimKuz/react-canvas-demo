@@ -1,45 +1,24 @@
-import React, {Component} from 'react';
+import {TimerBase} from "./TimerBase.tsx";
 
-export type TimerProps = {
-    width: number;
-    height: number;
-    showSeconds?: boolean;
-}
+export class Timer extends TimerBase {
 
-type TimerState = {
-    displayText: string
-}
+    doPaint(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D)
+    {
+        const centerX = this.width / 2;
+        const centerY = this.height / 2;
 
-export class Timer extends Component<TimerProps, TimerState> {
+        context.fillStyle = 'lightgray';
+        context.fillRect(0, 0, this.width, this.height);
 
-    constructor({width, height, showSeconds = true}: TimerProps) {
-        super({width, height, showSeconds});
-        this.state = {
-            displayText: this.getCurrentTimeStr(),
-        };
+        context.font = "normal "+30+"pt Arial ";
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.fillStyle = 'black';
+        context.fillText(this.getCurrentTimeStr(), centerX, centerY)
     }
 
-    render() {
-        return (
-            <h1>
-                {this.state.displayText}
-            </h1>
-        );
-    }
-
-    intervalId = 0;
-
-    componentDidMount() {
-        this.intervalId = setInterval(() => {
-            this.setState({displayText: this.getCurrentTimeStr()});
-       }, 500);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.intervalId);
-    }
-
-    getCurrentTimeStr() {
+    getCurrentTimeStr()
+    {
         let formatter;
         if (this.props.showSeconds === undefined || this.props.showSeconds)
             formatter = new Intl.DateTimeFormat('ru-RU',
