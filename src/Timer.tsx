@@ -10,19 +10,32 @@ type TimerProps = {
 
 export class Timer extends TimerBase<TimerProps> {
 
+    private showColon: boolean = true;
+
+    constructor(props: TimerProps)
+    {
+        super(props);
+    }
+
     doPaint(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D)
     {
+        // если нет секунд, то мигать двоеточием
+        if (!this.props.showSeconds) this.showColon = !this.showColon;
+
         const centerX = this.width / 2;
         const centerY = this.height / 2;
 
         context.fillStyle = this.props.backStyle;
         context.fillRect(0, 0, this.width, this.height);
 
-        context.font = "normal "+30+"pt Arial ";
+
         context.textAlign = 'center';
         context.textBaseline = 'middle';
         context.fillStyle = this.props.textStyle;
-        context.fillText(this.getCurrentTimeStr(), centerX, centerY)
+        let text = this.getCurrentTimeStr();
+        if (!this.showColon) text = text.replace(':', ' ').replace(':', ' ');
+        context.font = `normal ${this.height*2/3}px Arial `;
+        context.fillText(text, centerX, centerY)
     }
 
     getCurrentTimeStr()
