@@ -1,6 +1,6 @@
-import {Canvas} from "./Canvas.tsx";
+import {Canvas, type CanvasProps} from "./Canvas.tsx";
 
-export class TimerBase extends Canvas {
+export class TimerBase<T extends CanvasProps> extends Canvas<T> {
     intervalId = 0;
 
     componentDidMount() {

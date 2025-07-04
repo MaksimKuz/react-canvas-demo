@@ -6,14 +6,14 @@ export type CanvasProps = {
     height: number
 }
 
-export class Canvas extends Component<CanvasProps> {
+export class Canvas<T extends CanvasProps> extends Component<T> {
     private _canvasRef: React.RefObject<HTMLCanvasElement>;
     private _canvas?: HTMLCanvasElement;
     private _context?: CanvasRenderingContext2D;
 
-    constructor({width, height}: CanvasProps)
+    constructor(props: CanvasProps)
     {
-        super({width, height});
+        super(props as T);
         this._canvasRef = React.createRef() as React.RefObject<HTMLCanvasElement>;
     }
 

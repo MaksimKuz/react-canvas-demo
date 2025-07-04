@@ -9,7 +9,7 @@ function App() {
   return (
       <div style={{display:"flex", flexDirection:"row", flexWrap:"wrap"}}>
           <div style={blockStyle}><TimePanel width={500} height={700} showSeconds={true} showDate={true} /></div>
-          <div style={blockStyle}><TimePanel width={200} height={300} showSeconds={false} /></div>
+          <div style={blockStyle}><TimePanel width={200} height={300} showSeconds={false} showDate={false} /></div>
 
       </div>
   )
