@@ -94,7 +94,6 @@ class Clock extends Canvas
      */
     private showArrows(context: CanvasRenderingContext2D)
     {
-
         const [hours, minutes, seconds] = getArrowAngles();
         const [hoursX, hoursY] = this.pointOnCircle(this.radius/2*6/5, hours);
         line(context, this.centerX, this.centerY, hoursX, hoursY, 3);
