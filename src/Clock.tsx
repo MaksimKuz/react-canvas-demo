@@ -1,5 +1,4 @@
 import {TimerBase} from "./TimerBase.tsx";
-import type {CanvasProps} from "./Canvas.tsx";
 
 const hourTickSize = 7;
 
@@ -8,6 +7,7 @@ export type ClockProps = {
     height: number;
     showSecondsArrow: boolean;
     showDate: boolean;
+    romanNumerals?: boolean;
 }
 
 class Clock extends TimerBase<ClockProps>
@@ -19,6 +19,7 @@ class Clock extends TimerBase<ClockProps>
     radius = 0;
     fontSize = 0;
     formatter = new Intl.DateTimeFormat('ru-RU', {day: '2-digit', month: 'short'});
+    romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 
     doPaint(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D)
     {
@@ -50,15 +51,14 @@ class Clock extends TimerBase<ClockProps>
             const [x1, y1] = this.pointOnCircle(this.radius-hourTickSize, angle);
             const [x2, y2] = this.pointOnCircle(this.radius, angle);
             line(context, x1, y1, x2, y2, 3);
-            // circle(context, x2, y2, 3, "black");
 
             context.font = `normal ${this.fontSize}px Arial `;
             context.textAlign = 'center';
             context.textBaseline = 'middle';
             context.fillStyle = 'black';
-            const textRadius = this.radius + 15;
+            const textRadius = this.radius + this.fontSize*2/3;
             const [textX, textY] = this.pointOnCircle(textRadius, angle);
-            context.fillText(hourToText(i), textX, textY);
+            context.fillText(this.hourToText(i), textX, textY);
 
             this.showMinuteTicks(context, i);
         }
@@ -134,12 +134,15 @@ class Clock extends TimerBase<ClockProps>
         context.fillStyle = 'black';
         context.fillText(dateText, this.centerX, this.centerY + this.radius/2)
     }
-}
 
-function hourToText(hour: number): string
-{
-    if (hour === 0) return '12';
-    return hour.toString()
+    private hourToText(hour: number): string
+    {
+        if (hour === 0) hour = 12;
+
+        if (this.props.romanNumerals)
+            return this.romanNumerals[hour-1];
+        return hour.toString();
+    }
 }
 
 function getArrowAngles()
