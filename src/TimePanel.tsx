@@ -12,7 +12,7 @@ export type TimePanelProps = {
 export default function TimePanel({width, height, showSeconds, showDate}: TimePanelProps) {
     return (
         <div>
-            <Clock width={width} height={height*5/6} showSecondsArrow={showSeconds} showDate={showDate} borderWidth={30}/>
+            <Clock width={width} height={height*5/6} showSecondsArrow={showSeconds} showDate={showDate} />
             <Timer width={width} height={height/6} showSeconds={showSeconds} backStyle={'lightgray'} textStyle={'black'}/>
         </div>
     );

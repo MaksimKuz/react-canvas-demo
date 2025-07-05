@@ -1,4 +1,5 @@
 import {TimerBase} from "./TimerBase.tsx";
+import type {CanvasProps} from "./Canvas.tsx";
 
 const hourTickSize = 7;
 
@@ -6,7 +7,6 @@ export type ClockProps = {
     width: number;
     height: number;
     showSecondsArrow: boolean;
-    borderWidth: number;
     showDate: boolean;
 }
 
@@ -17,10 +17,15 @@ class Clock extends TimerBase<ClockProps>
     centerY = 0;
     // внешний радиус часов
     radius = 0;
+    fontSize = 0;
+    formatter = new Intl.DateTimeFormat('ru-RU', {day: '2-digit', month: 'short'});
 
     doPaint(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D)
     {
-        this.radius = Math.min(this.width, this.height)/2-this.props.borderWidth;
+        this.fontSize = this.height/20;
+        context.font = `normal ${this.fontSize}px Arial`;
+        const borderWidth = 4*context.measureText('3').width;
+        this.radius = Math.min(this.width, this.height)/2-borderWidth;
         this.centerX = this.width / 2;
         this.centerY = this.height / 2;
 
@@ -47,7 +52,7 @@ class Clock extends TimerBase<ClockProps>
             line(context, x1, y1, x2, y2, 3);
             // circle(context, x2, y2, 3, "black");
 
-            context.font = "normal " + 18 + "pt Arial ";
+            context.font = `normal ${this.fontSize}px Arial `;
             context.textAlign = 'center';
             context.textBaseline = 'middle';
             context.fillStyle = 'black';
@@ -113,15 +118,21 @@ class Clock extends TimerBase<ClockProps>
 
     private showDate(context: CanvasRenderingContext2D)
     {
-        context.fillStyle = 'lightgray';
-        context.fillRect(this.centerX-50, this.centerY + this.radius/2-20, 100, 40);
+        const dateText = this.formatter.format(Date.now());
 
-        context.font = "normal "+16+"pt Arial ";
+        context.font = `normal ${this.fontSize*3/4}px Arial`;
+        const textMetrics = context.measureText(dateText);
+
+        context.fillStyle = 'lightgray';
+        const datePanelWidth = textMetrics.width*3/2;
+        const datePanelHeight = this.fontSize*3/2;
+        context.fillRect(this.centerX-datePanelWidth/2,
+                         this.centerY + this.radius/2-datePanelHeight/2, datePanelWidth, datePanelHeight);
+
         context.textAlign = 'center';
         context.textBaseline = 'middle';
         context.fillStyle = 'black';
-        const formatter = new Intl.DateTimeFormat('ru-RU', {day:'2-digit', month:'short'});
-        context.fillText(formatter.format(Date.now()), this.centerX, this.centerY + this.radius/2)
+        context.fillText(dateText, this.centerX, this.centerY + this.radius/2)
     }
 }
 
